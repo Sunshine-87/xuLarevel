@@ -59,13 +59,13 @@ return
             {
                 "name":"分享信息",
                 "method":"get",
-                "route":"/signin/share.json"
+                "route":"/signin/share.json?type=1"
             },
             {
                 "name":"签到页面",
                 "method":"get",
                 "route":"/signin/signpage.json"
             }
-        ]
+        ff]
     }';
 ?>
