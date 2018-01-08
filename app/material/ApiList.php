@@ -66,6 +66,6 @@ return
                 "method":"get",
                 "route":"/signin/signpage.json"
             }
-        ff]
+        ]
     }';
 ?>

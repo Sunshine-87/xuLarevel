@@ -17,3 +17,8 @@ Route::get('/', function () {
 
 Route::get('api_check_all.json', 'ApiCheckController@runAll');
 Route::get('api_check/{key}.json', 'ApiCheckController@runOne');
+Route::get('api_list.json', 'ApiCheckController@apiList');
+
+Route::get('example', function () {
+    return view('example');
+});

@@ -12,11 +12,15 @@ class ApiCheckController extends Controller
         $this->result = array('data' => &$this->data, 'status' => false);
         $apiTemp = json_decode($apiJson, true);
         if (is_null($apiTemp)) {
-            $this->result['error'] = 'json 格式错误';
-            return Response::json($this->result, 200);
+            throw   Exception('json格式错误');
         }
         $this->apilist = $apiTemp['api'];
         $this->domain = $apiTemp['domain'];
+    }
+
+    public function apiList() {
+        $this->data = $this->apilist;
+        return Response::json($this->result, 200);
     }
 
     public function runAll() {
