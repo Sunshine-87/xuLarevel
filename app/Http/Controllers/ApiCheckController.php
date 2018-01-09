@@ -25,7 +25,7 @@ class ApiCheckController extends Controller
 
     public function runAll() {
         foreach ($this->apilist as $value) {
-            $this->api_exec($value);
+            $this->api_exec($value, 0);
         }
         return Response::json($this->result, 200);
     }
@@ -34,13 +34,13 @@ class ApiCheckController extends Controller
         if (is_numeric($key)) {
             if (isset($this->apilist[$key])) {
                 $api = $this->apilist[$key];
-                $this->api_exec($api);
+                $this->api_exec($api, 1);
             }
         }
         return Response::json($this->result, 200);
     }
 
-    private function api_exec($api) {
+    private function api_exec($api, $type = 0) {
         $data = array();
         $success = false;
         $method = $api['method'];
@@ -59,7 +59,12 @@ class ApiCheckController extends Controller
 //            if ($method == 'post') {
 //                $data = $curl_rs['data'];
 //            }
-        $this->data[] = compact('route', 'name', 'success', 'method', 'data');
+        if ($type == 0) {
+            $this->data[] = compact('route', 'name', 'success', 'method', 'data');
+        } else {
+            $this->data = compact('route', 'name', 'success', 'method', 'data');
+        }
+
         $this->result['status'] = true;
     }
 
