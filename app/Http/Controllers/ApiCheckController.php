@@ -50,7 +50,8 @@ class ApiCheckController extends Controller
         $args = isset($api['args']) ? $api['args'] : array();
         $params = compact('method', 'url', 'args');
         $curl_rs = $this->p_curl($params);
-        if ($curl_rs['http_code'] == 200) {
+        $curl_data = json_decode($curl_rs['data'], true);
+        if ($curl_rs['http_code'] == 200 && $curl_data !== null) {
             $success = true;
         }
         if ($success == false) {
@@ -60,9 +61,9 @@ class ApiCheckController extends Controller
 //                $data = $curl_rs['data'];
 //            }
         if ($type == 0) {
-            $this->data[] = compact('route', 'name', 'success', 'method', 'data');
+            $this->data[] = compact('url', 'name', 'success', 'method', 'data');
         } else {
-            $this->data = compact('route', 'name', 'success', 'method', 'data');
+            $this->data = compact('url', 'name', 'success', 'method', 'data');
         }
 
         $this->result['status'] = true;
@@ -73,18 +74,22 @@ class ApiCheckController extends Controller
         $method = $params['method'];
         $args = $params['args'];
 
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        if ($method == 'post') {
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
-        }
+        // if ($method == 'post') {
+        //     curl_setopt($ch, CURLOPT_POST, 1);
+        //     curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
+        // }
+        var_dump(curl_getinfo($ch));
         $data = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         curl_close($ch);
+
+        exit;
 
         $result = compact('data', 'http_code');
         return $result;

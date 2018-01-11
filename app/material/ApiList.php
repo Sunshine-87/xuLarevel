@@ -3,12 +3,12 @@ namespace app\material;
 
 return
     '{
-        "domain":"http://shop2.dxdodoca009.com",
+        "domain":"http://shop1.wxrrd.dev",
         "api":[
             {
                 "name":"点击签到",
                 "method":"get",
-                "route":"/signin/signin.json"
+                "route":"/signin/signin.json?wbdebug=1"
             },
             {
                 "name":"轮播图（废弃）",
@@ -59,7 +59,7 @@ return
             {
                 "name":"分享信息",
                 "method":"get",
-                "route":"/signin/share.json?type=1"
+                "route":"/signin/sfffhare.json"
             },
             {
                 "name":"签到页面",

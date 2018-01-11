@@ -9,13 +9,13 @@ Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.use(ElementUI);
 
-import Example from './components/Example.vue'
+import ApiCheck from './components/ApiCheck.vue'
 
 const router = new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [
-    { path: '/example', component: Example }
+    { path: '/api_check', component: ApiCheck }
   ]
 })
 
