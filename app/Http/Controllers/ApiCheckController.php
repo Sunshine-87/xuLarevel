@@ -57,9 +57,9 @@ class ApiCheckController extends Controller
         if ($success == false) {
             $data = $curl_rs['data'];
         }
-//            if ($method == 'post') {
-//                $data = $curl_rs['data'];
-//            }
+        if ($method == 'post') {
+            $data = $curl_rs['data'];
+        }
         if ($type == 0) {
             $this->data[] = compact('url', 'name', 'success', 'method', 'data');
         } else {
@@ -79,17 +79,15 @@ class ApiCheckController extends Controller
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // if ($method == 'post') {
-        //     curl_setopt($ch, CURLOPT_POST, 1);
-        //     curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
-        // }
-        var_dump(curl_getinfo($ch));
+        if ($method == 'post') {
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $args);
+        }
         $data = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         curl_close($ch);
 
-        exit;
 
         $result = compact('data', 'http_code');
         return $result;

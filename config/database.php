@@ -40,18 +40,55 @@ return [
         ],
 
         'mysql' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'write' => [
+                'host' => env('DB_HOST_WRITE', '127.0.0.1'),
+                'database'  => env('DB_DATABASE', 'wxrrd'),
+                'username'  => env('DB_USERNAME', 'root')
+            ],
+            'read' => [
+                'host' => [
+                    env('DB_HOST_READ_1', '127.0.0.1'),
+                    env('DB_HOST_READ_2', '127.0.0.1')
+                ],
+                'database'  => env('DB_DATABASE', 'wxrrd'),
+                'username'  => env('DB_USERNAME', 'root')
+            ],
+            'driver'    => 'mysql',
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
+            'host'      => env('DB_HOST', '127.0.0.1'),
+            'database'  => env('DB_DATABASE', 'wxrrd'),
+            'username'  => env('DB_USERNAME', 'root'),
+            'password'  => env('DB_PASSWORD', ''),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
+
+        'wxrrd' => [
+            'write' => [
+                'host' => env('DB_HOST_WRITE', '127.0.0.1'),
+                'database'  => env('DB_DATABASE', 'wxrrd'),
+                'username'  => env('DB_USERNAME', 'root')
+            ],
+            'read' => [
+                'host' => [
+                    env('DB_HOST_READ_1', '127.0.0.1'),
+                    env('DB_HOST_READ_2', '127.0.0.1')
+                ],
+                'database'  => env('DB_DATABASE', 'wxrrd'),
+                'username'  => env('DB_USERNAME', 'root')
+            ],
+            'driver'    => 'mysql',
+            'port' => env('DB_PORT', '3306'),
+            'host'      => env('DB_HOST', '127.0.0.1'),
+            'database'  => env('DB_DATABASE', 'wxrrd'),
+            'username'  => env('DB_USERNAME', 'root'),
+            'password'  => env('DB_PASSWORD', ''),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
         ],
 
         'pgsql' => [
