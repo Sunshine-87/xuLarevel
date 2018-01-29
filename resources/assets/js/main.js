@@ -10,12 +10,14 @@ Vue.use(VueRouter);
 Vue.use(ElementUI);
 
 import ApiCheck from './components/ApiCheck.vue'
+import OrderInfo from './components/OrderInfo.vue'
 
 const router = new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [
-    { path: '/api_check', component: ApiCheck }
+    { path: '/api_check', component: ApiCheck },
+    { path: '/order_info', component: OrderInfo }
   ]
 })
 
