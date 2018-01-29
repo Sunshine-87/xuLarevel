@@ -141,7 +141,7 @@ class OrderRefundController extends Controller
                 if ($sqlRes[0]['true_refund_quantity'] > $sqlRes[0]['quantity']) {
                     die('退款数量大于购买数量');
                 }
-                if ($sqlRes[0]['true_refund_quantity'] < $sqlRes[0]['quantity']) {
+                if ($sqlRes[0]['true_refund_quantity'] > 0 && $sqlRes[0]['true_refund_quantity'] < $sqlRes[0]['quantity']) {
                     echo 'UPDATE order_goods SET `status` = 40,`refund_status` = 31,refund_quantity = '.$sqlRes[0]['true_refund_quantity'].', updated_at = NOW() WHERE order_id = '.$order_id.';'.PHP_EOL;
                     $typeR = 2;
                 } else {
@@ -259,7 +259,7 @@ class OrderRefundController extends Controller
 
         $credit_amount = OrderUmp::where($where)->where('type', 3)->sum('amount');
         if ($credit_amount > 0) {
-            $credit_credit = CreditDetail::select('sum(credit)','credit')->where('member_id', (int)$member_id)->where('memo', 'like', '%'.$credit_amount.'%')->first();
+            $credit_credit = CreditDetail::select(\DB::Raw('sum(credit)'),'credit')->where('member_id', (int)$member_id)->where('memo', 'like', '%'.$credit_amount.'%')->first();
             if ($credit_credit['sum(credit)'] < 0) {
                 echo '#'.($member_id+1000002016).':\'退款退积分'.-$credit_credit['credit'].'\'';
             }
