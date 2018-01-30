@@ -74,14 +74,14 @@ class OrderRefundController extends Controller
             }
         }
         $correct = (count($correct_row) == count($sqlRes)) ? 'true' : 'false';
-        echo "======================".PHP_EOL;
-        echo "Row Number:".count($sqlRes).PHP_EOL;
-        echo "correct_row:".count($correct_row).PHP_EOL;
-        echo "has_refunded:".count($has_refunded).PHP_EOL;
-        echo "has_shipped:".count($has_shipped).PHP_EOL;
-        echo "correct:".$correct.PHP_EOL;
-        echo "type:".$type.PHP_EOL;
-        echo "======================".PHP_EOL;
+        echo "======================".'<br />';
+        echo "Row Number:".count($sqlRes).'<br />';
+        echo "correct_row:".count($correct_row).'<br />';
+        echo "has_refunded:".count($has_refunded).'<br />';
+        echo "has_shipped:".count($has_shipped).'<br />';
+        echo "correct:".$correct.'<br />';
+        echo "type:".$type.'<br />';
+        echo "======================".'<br />';
 //        if ($correct == 'true' && !$hard) {
 //            die('订单正常');
 //        }
@@ -110,14 +110,14 @@ class OrderRefundController extends Controller
         $amount = Trade::where('type', 0)->where('order_id', $order_id)->sum('total_fee');
 
         $trade_info = Trade::where($where)->first();
-        // echo 'refunded_amount:'.$refunded_amount.PHP_EOL;
-        // echo 'refund_amount:'.$refund_amount.PHP_EOL;
+        // echo 'refunded_amount:'.$refunded_amount.'<br />';
+        // echo 'refund_amount:'.$refund_amount.'<br />';
 
         if ($ra) {
             $refund_amount = 0-$ra;
         }
         if (round($refunded_amount - $refund_amount, 2) > round($amount, 2)) {
-            echo "======================".PHP_EOL;
+            echo "======================".'<br />';
             echo '退款总额';var_dump(round($refunded_amount - $refund_amount, 2));
             echo '应退款';var_dump(round($amount, 2));
             echo "超额退款";exit;
@@ -130,7 +130,7 @@ class OrderRefundController extends Controller
                     ->orWhere('refund_status', '!=', '31');
             })->where($where)->first();
             if ($check) {
-                echo 'UPDATE order_goods SET `status` = 13,`refund_status` = 31,refund_quantity = quantity, updated_at = NOW() WHERE order_id = '.$order_id.';'.PHP_EOL;
+                echo 'UPDATE order_goods SET `status` = 13,`refund_status` = 31,refund_quantity = quantity, updated_at = NOW() WHERE order_id = '.$order_id.';'.'<br />';
             }
         } else {
             if (count($sqlRes) == 1) {
@@ -142,11 +142,11 @@ class OrderRefundController extends Controller
                     die('退款数量大于购买数量');
                 }
                 if ($sqlRes[0]['true_refund_quantity'] > 0 && $sqlRes[0]['true_refund_quantity'] < $sqlRes[0]['quantity']) {
-                    echo 'UPDATE order_goods SET `status` = 40,`refund_status` = 31,refund_quantity = '.$sqlRes[0]['true_refund_quantity'].', updated_at = NOW() WHERE order_id = '.$order_id.';'.PHP_EOL;
+                    echo 'UPDATE order_goods SET `status` = 40,`refund_status` = 31,refund_quantity = '.$sqlRes[0]['true_refund_quantity'].', updated_at = NOW() WHERE order_id = '.$order_id.';'.'<br />';
                     $typeR = 2;
                 } else {
                     if ($check) {
-                        echo 'UPDATE order_goods SET `status` = 13,`refund_status` = 31,refund_quantity = quantity, updated_at = NOW() WHERE order_id = '.$order_id.';'.PHP_EOL;
+                        echo 'UPDATE order_goods SET `status` = 13,`refund_status` = 31,refund_quantity = quantity, updated_at = NOW() WHERE order_id = '.$order_id.';'.'<br />';
                     }
                 }
             } else {
@@ -178,18 +178,18 @@ class OrderRefundController extends Controller
                     })->whereIn('id', $refund_ordergoods_id)->first();
                     if ($check) {
                         $goods_id = '('.implode(',', $refund_ordergoods_id).')';
-                        echo 'UPDATE order_goods SET `status` = 13,`refund_status` = 31,refund_quantity = quantity, updated_at = NOW() WHERE id in '.$goods_id.';'.PHP_EOL;
+                        echo 'UPDATE order_goods SET `status` = 13,`refund_status` = 31,refund_quantity = quantity, updated_at = NOW() WHERE id in '.$goods_id.';'.'<br />';
                     }
                     if (count($ship_ordergoods_id)) {
                         $check = OrderGoods::where('status', '<', '40')->whereIn('id', $ship_ordergoods_id)->first();
                         if ($check) {
-                            echo 'UPDATE order_goods SET `status` = 40, updated_at = NOW() WHERE id in '.$ship_goods_id.';'.PHP_EOL;
+                            echo 'UPDATE order_goods SET `status` = 40, updated_at = NOW() WHERE id in '.$ship_goods_id.';'.'<br />';
                         }
                     }
                     $check = OrderRefund::where('status', '!=', '31')->whereIn('id', $refund_refund_id)->first();
                     if ($check) {
                         $refund_id = '('.implode(',', $refund_refund_id).')';
-                        echo 'UPDATE `order_refund` SET status = 31 , feedback = 1 , memo = \'手动完成退款\' , operated_at = NOW() , finished_at=NOW() , updated_at=NOW() WHERE id in '.$refund_id.';'.PHP_EOL;
+                        echo 'UPDATE `order_refund` SET status = 31 , feedback = 1 , memo = \'手动完成退款\' , operated_at = NOW() , finished_at=NOW() , updated_at=NOW() WHERE id in '.$refund_id.';'.'<br />';
                     }
                     $typeR = 2;
                 } else {
@@ -198,7 +198,7 @@ class OrderRefundController extends Controller
                             ->orWhere('refund_status', '!=', '31');
                     })->where($where)->first();
                     if ($check) {
-                        echo 'UPDATE order_goods SET `status` = 13,`refund_status` = 31,refund_quantity = quantity, updated_at = NOW() WHERE order_id = '.$order_id.';'.PHP_EOL;
+                        echo 'UPDATE order_goods SET `status` = 13,`refund_status` = 31,refund_quantity = quantity, updated_at = NOW() WHERE order_id = '.$order_id.';'.'<br />';
                     }
                 }
             }
@@ -209,13 +209,13 @@ class OrderRefundController extends Controller
         if ($typeR == 2) {
             $check = Order::where($where)->where('status', '<', 40)->first();
             if ($check) {
-                echo 'UPDATE `order` SET `status` = 40,`memo` = \'手动发货\',shipments_at = NOW(), updated_at = NOW() WHERE order_id = '.$order_id.';'.PHP_EOL;
+                echo 'UPDATE `order` SET `status` = 40,`memo` = \'手动发货\',shipments_at = NOW(), updated_at = NOW() WHERE order_id = '.$order_id.';'.'<br />';
             }
 
         } else {
             $check = Order::where($where)->where('status', '!=', 13)->first();
             if ($check) {
-                echo 'UPDATE `order` SET `status` = 13,`memo` = \'手动退款\',shipments_at = NOW(), updated_at = NOW() WHERE order_id = '.$order_id.';'.PHP_EOL;
+                echo 'UPDATE `order` SET `status` = 13,`memo` = \'手动退款\',shipments_at = NOW(), updated_at = NOW() WHERE order_id = '.$order_id.';'.'<br />';
             }
 
             $where = array(
@@ -223,18 +223,18 @@ class OrderRefundController extends Controller
             );
             $check = OrderRefund::where($where)->where('status', '!=', 31)->first();
             if ($check) {
-                echo 'UPDATE order_refund SET `status` = 31,`memo` = \'手动完成退款\',`feedback` = 1, operated_at = NOW(), finished_at = NOW(), updated_at = NOW() WHERE order_id = '.$order_id.';'.PHP_EOL;
+                echo 'UPDATE order_refund SET `status` = 31,`memo` = \'手动完成退款\',`feedback` = 1, operated_at = NOW(), finished_at = NOW(), updated_at = NOW() WHERE order_id = '.$order_id.';'.'<br />';
             }
 
             $check = GuiderOrder::where($where)->where('status', 0)->first();
             if ($check && $typeR == 1) {
-                echo 'UPDATE guider_order SET status=2,updated_at = NOW() where order_id = '.$order_id.';'.PHP_EOL;
-                echo 'UPDATE guider_order_detail SET refund_comission = comission,updated_at = NOW() where order_id = '.$order_id.';'.PHP_EOL;
+                echo 'UPDATE guider_order SET status=2,updated_at = NOW() where order_id = '.$order_id.';'.'<br />';
+                echo 'UPDATE guider_order_detail SET refund_comission = comission,updated_at = NOW() where order_id = '.$order_id.';'.'<br />';
             }
 
             $check = PartnerOrder::where($where)->where('status', 0)->first();
             if ($check && $typeR == 1) {
-                echo 'UPDATE partner_order SET status=2,updated_at = NOW() where order_id = '.$order_id.';'.PHP_EOL;
+                echo 'UPDATE partner_order SET status=2,updated_at = NOW() where order_id = '.$order_id.';'.'<br />';
             }
         }
 
@@ -247,14 +247,14 @@ class OrderRefundController extends Controller
 `subject`, `total_fee`, `balance`, `is_sys`, `is_supplier`, `type`, `status`, `trade_sn`, `created_at`, `updated_at`, `settled_at`, `remarks`) VALUES
 (\'0\', \'0\', \''.$trade_info['merchant_id'].'\', \'0\', \''.$trade_info['shop_id'].'\',
 \'0\', \'0\', \''.$order_id.'\', \''.$trade_info['order_sn'].'\', \''.$trade_info['payment_name'].'\', \''.$trade_info['code'].'\', \''.$trade_info['payment_sn'].'\',
-\'订单退款\', \''.$refund_amount.'\', \'0.00\', \'0\', \'0\', \'1\', \'0\', \'\', NOW(), NOW(), \'0000-00-00 00:00:00\', "商户线下退款");'.PHP_EOL;
+\'订单退款\', \''.$refund_amount.'\', \'0.00\', \'0\', \'0\', \'1\', \'0\', \'\', NOW(), NOW(), \'0000-00-00 00:00:00\', "商户线下退款");'.'<br />';
         }
 
         if ($type == 3) {
-            echo PHP_EOL;
-            echo '#wxrrd_pintuan#'.PHP_EOL;
-            echo 'UPDATE tuan_refund SET status = 2 WHERE order_id = '.$order_id.';'.PHP_EOL;
-            echo 'UPDATE tuan_initiate_join SET status = 40 WHERE order_id = '.$order_id.';'.PHP_EOL;
+            echo '<br />';
+            echo '#wxrrd_pintuan#'.'<br />';
+            echo 'UPDATE tuan_refund SET status = 2 WHERE order_id = '.$order_id.';'.'<br />';
+            echo 'UPDATE tuan_initiate_join SET status = 40 WHERE order_id = '.$order_id.';'.'<br />';
         }
 
         $credit_amount = OrderUmp::where($where)->where('type', 3)->sum('amount');

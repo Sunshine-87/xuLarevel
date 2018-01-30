@@ -2,12 +2,16 @@
     <el-container>
         <el-header>Header</el-header>
         <el-container>
-            <el-aside width="200px">Aside</el-aside>
+            <el-aside width="70%">
+                <div class='big_bar order'>
+
+                </div>
+            </el-aside>
             <el-main>Main</el-main>
         </el-container>
     </el-container>
 </template>
-<style>
+<style scoped>
   .el-header, .el-footer {
     background-color: #B3C0D1;
     color: #333;
