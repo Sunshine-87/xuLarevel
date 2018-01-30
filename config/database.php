@@ -90,7 +90,18 @@ return [
             'prefix'    => '',
             'strict'    => false,
         ],
-
+        'wxrrd_logs'=>[
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST_LOGS', '127.0.0.1'),
+            'database'  => env('DB_DATABASE_LOGS', 'wxrrd_logs'),
+            'username'  => env('DB_USERNAME_LOGS', 'root'),
+            'password'  => env('DB_PASSWORD_LOGS', ''),
+            'port'      => env('DB_PORT_LOGS', '3306'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),

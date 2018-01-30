@@ -19,6 +19,7 @@ Route::get('api_check_all.json', 'ApiCheckController@runAll');
 Route::get('api_check/{key}.json', 'ApiCheckController@runOne');
 Route::group(['prefix' => 'fireBug'], function() {
     Route::get('order_refund/{order_sn}', 'OrderRefundController@orderRefund');
+    Route::get('order_info/{order_sn}', 'OrderInfoController@orderInfo');
 });
 
 Route::get('api_list.json', 'ApiCheckController@apiList');

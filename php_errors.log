@@ -25,3 +25,11 @@ These options need to match
  in Unknown on line 0
 [26-Jan-2018 04:36:56 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'ext\php_ssh2.dll' - 找不到指定的模块。
  in Unknown on line 0
+[30-Jan-2018 06:57:56 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'ext\php_ssh2.dll' - 找不到指定的模块。
+ in Unknown on line 0
+[30-Jan-2018 07:26:54 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'ext\php_ssh2.dll' - 找不到指定的模块。
+ in Unknown on line 0
+[30-Jan-2018 09:10:36 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'ext\php_ssh2.dll' - 找不到指定的模块。
+ in Unknown on line 0
+[30-Jan-2018 09:24:38 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'ext\php_ssh2.dll' - 找不到指定的模块。
+ in Unknown on line 0
