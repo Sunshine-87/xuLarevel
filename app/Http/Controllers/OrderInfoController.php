@@ -97,7 +97,7 @@ class OrderInfoController extends Controller
         }
         echo '<br \/>';
 
-        echo '推客订单'.'<br \/>';
+        echo '团队合伙人订单'.'<br \/>';
         echo '=============='.'<br \/>';
         if (empty($partner_order)) {
             echo '无'.'<br \/>';
