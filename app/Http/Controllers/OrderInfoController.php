@@ -43,7 +43,7 @@ class OrderInfoController extends Controller
             $this->getGid($order, $gid);
 
             $gid = isset($gid) ? $gid : GuiderInvitation::where('member_id', $order['member_id'])
-                ->where('type', 1)->where('shop_id', $order['shop_id'])->where('created_at', '<', $order['created_at'])->value('guider_id');
+                ->where('type', 1)->where('shop_id', $order['shop_id'])->where('bind_at', '<', $order['created_at'])->value('guider_id');
         } else {
             $gid = Guider::where('shop_id', $order['shop_id'])->where('member_id', $order['member_id'])
                 ->where('status', '!=', 1)->where('created_at', '<', $order['created_at'])->value('id');
@@ -51,7 +51,7 @@ class OrderInfoController extends Controller
                 $this->getGid($order, $gid);
             }
             $gid = $gid ? $gid : GuiderInvitation::where('member_id', $order['member_id'])
-                ->where('type', 1)->where('shop_id', $order['shop_id'])->where('created_at', '<', $order['created_at'])->value('guider_id');
+                ->where('type', 1)->where('shop_id', $order['shop_id'])->where('bind_at', '<', $order['created_at'])->value('guider_id');
         }
         $pid = $this->getPartnerId($order['member_id'], $order['shop_id'], $order['created_at']);
 
