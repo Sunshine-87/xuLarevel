@@ -10,3 +10,5 @@ Homestead.yaml
 npm-debug.log
 .env
 /public/php_errors.log
+
+php_errors.log
