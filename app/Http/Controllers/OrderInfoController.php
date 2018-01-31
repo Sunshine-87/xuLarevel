@@ -168,7 +168,7 @@ class OrderInfoController extends Controller
     private function getGid($order, &$gid) {
         $guider_log = GuiderLog::where('shop_id', $order['shop_id'])
             ->where('memo', 'like', '%为'.$order['member_id'].')%')
-            ->where('action_type', 1)
+            ->whereIn('action_type', [1,2])
             ->where('created_at', '>', $order['created_at'])
             ->orderBy('id', 'asc')
             ->value('memo');
