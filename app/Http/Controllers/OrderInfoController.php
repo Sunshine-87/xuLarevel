@@ -36,7 +36,13 @@ class OrderInfoController extends Controller
     }
 
     public function orderInfo($order_sn, Request $request) {
-        \Log::info(date('Y-m-d H:i:s').':orderInfo=>'.$order_sn);
+        $params = $request->all();
+        $abc = '';
+        if (isset($params['xu']) && $params['xu'] == 1) {
+            $abc .= 'xuboheng::';
+        }
+        \Log::info(date('Y-m-d H:i:s').':'.$abc.'orderInfo=>'.$order_sn);
+
         $order = Order::where('order_sn', $order_sn)->first();
         if (!$order) return Response::json(array('status' => false, 'errmsg' => '没有该订单'), 200);
         $member_name = Member::where('id', $order['member_id'])->value('name');
