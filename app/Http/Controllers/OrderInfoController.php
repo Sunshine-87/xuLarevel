@@ -65,12 +65,14 @@ class OrderInfoController extends Controller
 
             $gid = isset($gid) ? $gid : GuiderInvitation::where('member_id', $order['member_id'])
                 ->where('type', 1)->where('shop_id', $order['shop_id'])->where('bind_at', '<', $order['created_at'])->value('guider_id');
+            var_dump($gid);exit;
         } else {
             $gid = Guider::where('shop_id', $order['shop_id'])->where('member_id', $order['member_id'])
                 ->where('status', '!=', 1)->where('created_at', '<', $order['created_at'])->value('id');
             if (!$gid) {
                 $this->getGid($order, $gid);
             }
+
             $gid = $gid ? $gid : GuiderInvitation::where('member_id', $order['member_id'])
                 ->where('type', 1)->where('shop_id', $order['shop_id'])->where('bind_at', '<', $order['created_at'])->value('guider_id');
         }
@@ -85,7 +87,7 @@ class OrderInfoController extends Controller
                 $level_3 = $this->getPid($order, $level_2);
             }
             for ($i = 0; $i < 3; $i++) {
-                if (isset($guider_order[$i]) && $guider_order[$i]['guider_id'] != ${'level_'.($i+1)}) {
+                if ((!isset($guider_order[$i]) && ${'level_'.($i+1)} != 0) || $guider_order[$i]['guider_id'] != ${'level_'.($i+1)}) {
                     $this->error[] = '推客订单和预期不同';
                 }
             }
@@ -111,21 +113,24 @@ class OrderInfoController extends Controller
         $partner_order = $partner_order ? $partner_order : array();
         if ($pid) {
             $partner_reasonable = $pid;
-            if (isset($partner_order['partner_id']) && $pid != $partner_order['partner_id']) {
+            if ((!isset($partner_order['partner_id']) && $pid) || $pid != $partner_order['partner_id']) {
                 $this->error[] = '团队合伙人订单和预期不同';
             }
         }
         echo '推客订单'.'<br \/>';
         echo '=============='.'<br \/>';
-        if (empty($guider_order)) {
+        if (empty($guider_order) && empty($level_1)) {
             echo '无'.'<br \/>';
         } else {
-            if (!empty($guider_order[0])) {
-                echo '一级：'.$guider_order[0]['guider_id'].'预期：'.$guider_order_reasonable['level_1'].'<br \/>';
-                if (!empty($guider_order[1])) {
-                    echo '一级：'.$guider_order[1]['guider_id'].'预期：'.$guider_order_reasonable['level_2'].'<br \/>';
-                    if (!empty($guider_order[2])) {
-                        echo '一级：'.$guider_order[2]['guider_id'].'预期：'.$guider_order_reasonable['level_3'].'<br \/>';
+            if (!empty($guider_order[0]) || (!empty($level_1) && $level_1)) {
+                $id = !empty($guider_order[0]) ? $guider_order[0]['guider_id'] : 0;
+                echo '一级：'.$id.'预期：'.$guider_order_reasonable['level_1'].'<br \/>';
+                if (!empty($guider_order[1]) || (!empty($level_2) && $level_2)) {
+                    $id = !empty($guider_order[1]) ? $guider_order[1]['guider_id'] : 0;
+                    echo '二级：'.$id.'预期：'.$guider_order_reasonable['level_2'].'<br \/>';
+                    if (!empty($guider_order[2]) || (!empty($level_3) && $level_3)) {
+                        $id = !empty($guider_order[2]) ? $guider_order[2]['guider_id'] : 0;
+                        echo '三级：'.$id.'预期：'.$guider_order_reasonable['level_3'].'<br \/>';
                     }
                 }
             }
