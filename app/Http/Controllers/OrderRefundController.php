@@ -16,6 +16,7 @@ use App\Model\OrderRefund;
 class OrderRefundController extends Controller
 {
     public function orderRefund($order_sn, Request $request) {
+        \Log::info(date('Y-m-d H:i:s').':orderRefund=>'.$order_sn);
         set_time_limit(0);
         $param = $request->all();
         $ra = isset($param['ra']) ? $param['ra'] : 0;

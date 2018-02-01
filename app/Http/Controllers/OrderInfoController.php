@@ -24,7 +24,18 @@ class OrderInfoController extends Controller
     private $guider_change = array();
     private $error = array();
 
+    private function getHmi($second) {
+
+
+        $h = floor(($second % (3600*24)) / 3600);
+        $m = floor((($second % (3600*24)) % 3600) / 60);
+        $i = $second-$h*3600-$m*60;
+
+        return $h.':'.$m.':'.$i;
+    }
+
     public function orderInfo($order_sn, Request $request) {
+        \Log::info(date('Y-m-d H:i:s').':orderInfo=>'.$order_sn);
         $order = Order::where('order_sn', $order_sn)->first();
         if (!$order) return Response::json(array('status' => false, 'errmsg' => '没有该订单'), 200);
         $member_name = Member::where('id', $order['member_id'])->value('name');
@@ -33,6 +44,9 @@ class OrderInfoController extends Controller
         $guider_order = GuiderOrder::where('order_id', $order_id)->first();
         if ($guider_order) {
             $guider_order = GuiderOrderDetail::where('order_id', $order_id)->get();
+            if ((strtotime($guider_order[0]['created_at'])-strtotime($order['created_at']))>600) {
+                $this->error[]='生成推客订单过慢，耗时：'.$this->getHmi(strtotime($guider_order[0]['created_at'])-strtotime($order['created_at'])) ;
+            }
         }
 
 
