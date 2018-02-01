@@ -23,6 +23,7 @@ class OrderInfoController extends Controller
 {
     private $guider_change = array();
     private $error = array();
+    private $warning = array();
 
     private function getHmi($second) {
 
@@ -83,6 +84,20 @@ class OrderInfoController extends Controller
                 }
             }
             $guider_order_reasonable = compact('level_1', 'level_2', 'level_3');
+        } else {
+            $kf_target = ($guider_self_buy == 1) ? GuiderInvitation::where('member_id', $order['member_id'])
+                ->where('type', 1)->where('shop_id', $order['shop_id'])->
+                where('bind_at', '>', $order['created_at'])->first()
+                :
+                Guider::where('shop_id', $order['shop_id'])->where('member_id', $order['member_id'])
+                    ->where('status', '!=', 1)->where('created_at', '>', $order['created_at'])->first();
+            if ($kf_target) {
+                $kf_gid = ($guider_self_buy == 1) ? $kf_target['guider_id'] : $kf_target['id'];
+                $kf_createdAt = ($guider_self_buy == 1) ? $kf_target['bind_at'] : $kf_target['created_at'];
+                $kf_Account = Guider::where('id', $kf_gid)->value('member_id')+1000002016;
+                $this->warning[] = '客服可能会问:为什么'.$kf_Account.'下没有生成佣金。';
+                $this->warning[] = '回复:'.($guider_self_buy == 1) ? '推客锁定关系' : '推客关系'.'（'.$kf_createdAt.'）生成在订单（'.$order['created_at'].'）之后';
+            }
         }
 
 
@@ -140,6 +155,17 @@ class OrderInfoController extends Controller
                 echo $value.'<br \/>';
             }
         }
+        echo '<br \/>';
+
+        echo '预警'.'<br \/>';
+        echo '=============='.'<br \/>';
+        if (empty($this->warning)) {
+            echo '无'.'<br \/>';
+        } else {
+            foreach($this->warning as $value) {
+                echo $value.'<br \/>';
+            }
+        }
         exit;
         $result =  compact('order', 'partner_order', 'guider_order', 'guider_order_reasonable', 'partner_reasonable');
         $result['errmsg'] = $this->error;
@@ -150,8 +176,23 @@ class OrderInfoController extends Controller
     private function getPartnerId($member_id, $shop_id, $created_at) {
         $pid = Partner::where('member_id', $member_id)->where('created_at', '<', $created_at)->value('id');
 
+
+
         $pid = $pid ? $pid : PartnerMember::where('member_id', $member_id)->where('shop_id', $shop_id)->where('created_at', '<', $created_at)->value('superior_partner');
 
+
+        if (!$pid && $kf_target = PartnerMember::where('member_id', $member_id)->where('shop_id', $shop_id)->first()) {
+            $kf_pid = $kf_target['superior_partner'];
+            $kf_createdAt = $kf_target['created_at'];
+            $kf_Account = Partner::where('id', $kf_pid)->value('member_id')+1000002016;
+            foreach ($this->warning as $value) {
+                if (strpos($value, ''.$kf_Account) !== false) {
+                    return $pid;
+                }
+            }
+            $this->warning[] = '客服可能会问:为什么'.$kf_Account.'下没有生成分红。';
+            $this->warning[] = '回复:合伙人关系（'.$kf_createdAt.'）生成在订单（'.$created_at.'）之后';
+        }
         return $pid;
     }
 
