@@ -65,7 +65,6 @@ class OrderInfoController extends Controller
 
             $gid = isset($gid) ? $gid : GuiderInvitation::where('member_id', $order['member_id'])
                 ->where('type', 1)->where('shop_id', $order['shop_id'])->where('bind_at', '<', $order['created_at'])->value('guider_id');
-            var_dump($gid);exit;
         } else {
             $gid = Guider::where('shop_id', $order['shop_id'])->where('member_id', $order['member_id'])
                 ->where('status', '!=', 1)->where('created_at', '<', $order['created_at'])->value('id');
