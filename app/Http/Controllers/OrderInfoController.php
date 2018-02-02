@@ -69,6 +69,7 @@ class OrderInfoController extends Controller
         } else {
             $gid = Guider::where('shop_id', $order['shop_id'])->where('member_id', $order['member_id'])
                 ->where('status', '!=', 1)->where('created_at', '<', $order['created_at'])->value('id');
+
             if (!$gid) {
                 $this->getGid($order, $gid);
             }
@@ -87,8 +88,16 @@ class OrderInfoController extends Controller
                 $level_3 = $this->getPid($order, $level_2);
             }
             for ($i = 0; $i < 3; $i++) {
-                if ((!isset($guider_order[$i]) && ${'level_'.($i+1)} != 0) || $guider_order[$i]['guider_id'] != ${'level_'.($i+1)}) {
-                    $this->error[] = '推客订单和预期不同';
+                if (isset($guider_order[$i])) {
+                    if (isset(${'level_'.($i+1)})) {
+                        if ($guider_order[$i]['guider_id'] != ${'level_'.($i+1)}) {
+                            $this->error[] = '推客订单和预期不同';
+                        }
+                    }
+                } else {
+                    if (isset(${'level_'.($i+1)}) && ${'level_'.($i+1)} != 0) {
+                        $this->error[] = '推客订单和预期不同';
+                    }
                 }
             }
             $guider_order_reasonable = compact('level_1', 'level_2', 'level_3');
@@ -210,7 +219,7 @@ class OrderInfoController extends Controller
 
     private function getPid($order, $guider_id) {
         $guider_log = GuiderLog::where('shop_id', $order['shop_id'])
-            ->where('memo', 'like', '%为'.$guider_id.')%')
+            ->where('memo', 'like', '%为'.$guider_id.')的上级%')
             ->where('action_type', 0)
             ->where('created_at', '>', $order['created_at'])
             ->orderBy('id', 'asc')
@@ -233,8 +242,16 @@ class OrderInfoController extends Controller
 
     private function getGid($order, &$gid) {
         $guider_log = GuiderLog::where('shop_id', $order['shop_id'])
-            ->where('memo', 'like', '%为'.$order['member_id'].')%')
-            ->whereIn('action_type', [1,2])
+            ->where(function($query) use($order) {
+                $query->where(function($query) use ($order) {
+                    $query->where('memo', 'like', '%为'.$order['member_id'].')的锁定%')
+                        ->where('action_type', 1);
+                })
+                ->orwhere(function($query) use ($order) {
+                    $query->where('memo', 'like', '%为'.$order['member_id'].')与推客%')
+                        ->where('action_type', 2);
+                });
+            })
             ->where('created_at', '>', $order['created_at'])
             ->orderBy('id', 'asc')
             ->value('memo');
