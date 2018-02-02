@@ -27,9 +27,10 @@ class OrderInfoController extends Controller
 
     private function getHmi($second) {
 
-
-        $h = floor(($second % (3600*24)) / 3600);
+        $d = floor($second / (3600*24));
+        $h = floor(($second % (3600*24)) / 3600)+$d*24;
         $m = floor((($second % (3600*24)) % 3600) / 60);
+
         $i = $second-$h*3600-$m*60;
 
         return $h.':'.$m.':'.$i;
