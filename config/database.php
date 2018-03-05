@@ -65,6 +65,19 @@ return [
             'strict'    => false,
         ],
 
+        'dota' => [
+            'driver'    => 'mysql',
+            'port' => env('DOTA_DB_PORT', '3306'),
+            'host'      => env('DOTA_DB_HOST', '127.0.0.1'),
+            'database'  => env('DOTA_DB_DATABASE', 'dota'),
+            'username'  => env('DOTA_DB_USERNAME', 'root'),
+            'password'  => env('DOTA_DB_PASSWORD', ''),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
+
         'wxrrd' => [
             'write' => [
                 'host' => env('DB_HOST_WRITE', '127.0.0.1'),
