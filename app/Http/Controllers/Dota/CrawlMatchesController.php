@@ -114,7 +114,6 @@ class CrawlMatchesController extends Controller
     public function getMatch() {
         $q = $this->query;
         $q['start_at_match_seq_num'] = $this->seqNum;
-        Cache::put('dota_SeqNum', $this->seqNum+($this->turn*100), Carbon::Now()->addMinutes(10));
         $q['matches_requested'] = 100;
         $query = http_build_query($q);
         $matches = json_decode($this->client->get(config('dota.apiUrl.GetMatchHistoryBySequenceNum').'?'.$query)->getBody()->getContents(),true)['result']['matches'];
