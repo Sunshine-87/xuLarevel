@@ -20,7 +20,7 @@ class CrawlMatchesController extends Controller
             'timeout' => 200,
             'verify' => false,
         ]);
-        $this->turn = 50;
+        $this->turn = 1000;
         $cacheSeqNum = Cache::has('dota_SeqNum') ? Cache::get('dota_SeqNum') : 0;
         $dbSeqNum = Matches::orderBy('match_seq_num', 'desc')->value('match_seq_num');
         $seqNum = ($cacheSeqNum > $dbSeqNum) ? $cacheSeqNum : $dbSeqNum;
@@ -58,7 +58,6 @@ class CrawlMatchesController extends Controller
                     $match_insert['dire_score'] = $match['dire_score'];
                     Matches::create($match_insert);
                     $this->has_crawl++;
-                    echo $this->has_crawl.':'.$match['match_seq_num'].PHP_EOL;
                     foreach ($match['players'] as $player) {
                         $player_insert['match_id'] = $match_id;
                         $player_insert['account_id'] = $player_id = isset($player['account_id']) ? $player['account_id'] : 0;
@@ -103,11 +102,12 @@ class CrawlMatchesController extends Controller
                         }
                     }
                 } else {
-                    exit('Crawl '.$this->has_crawl.' matches,cost:'.$start_time->diffInSeconds().' seconds');
+                    exit('Crawl '.$this->has_crawl.' matches,cost:'.$start_time->diffInSeconds().' seconds'.PHP_EOL);
                 }
             }
+            echo 'Crawl '.$this->has_crawl.' matches,cost:'.$start_time->diffInSeconds().' seconds'.PHP_EOL;
         }
-        echo 'Crawl '.$this->has_crawl.' matches,cost:'.$start_time->diffInSeconds().' seconds';
+
         return Response::json(array('status' => true, 'msg' => '抓取完成'));
     }
 
