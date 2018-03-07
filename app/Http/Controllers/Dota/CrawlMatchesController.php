@@ -20,7 +20,7 @@ class CrawlMatchesController extends Controller
             'timeout' => 200,
             'verify' => false,
         ]);
-        $this->turn = 1000;
+        $this->turn = 10000;
         $cacheSeqNum = Cache::has('dota_SeqNum') ? Cache::get('dota_SeqNum') : 0;
         $dbSeqNum = Matches::orderBy('match_seq_num', 'desc')->value('match_seq_num');
         $seqNum = ($cacheSeqNum > $dbSeqNum) ? $cacheSeqNum : $dbSeqNum;
